@@ -5,17 +5,21 @@ require('dotenv').config();
 
 const app = express();
 
-// ============ MIDDLEWARE ============
+// ============ CORS (FIXED) ============
 app.use(cors({
     origin: [
         'http://localhost:5173',
         'http://localhost:3000',
-        /\.vercel\.app$/,
-        /\.railway\.app$/
+        'https://shoppluxe.vercel.app',
+        'https://shoppluxe-kpkt.vercel.app',
+        /\.vercel\.app$/
     ],
-    credentials: true
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+// ============ MIDDLEWARE ============
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
@@ -68,7 +72,7 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log('');
     console.log('═══════════════════════════════════════');
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
+    console.log(`🚀 Server running on port ${PORT}`);
     console.log('═══════════════════════════════════════');
     console.log('');
 });
