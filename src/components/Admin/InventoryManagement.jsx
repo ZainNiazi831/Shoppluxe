@@ -106,7 +106,7 @@ const InventoryManagement = () => {
         try {
             const token = localStorage.getItem('token');
             await axios.put(
-                `http://localhost:5000/api/products/${productId}`,
+                `import.meta.env.VITE_API_URL/api/products/${productId}`,
                 { stockQuantity: newStock },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
