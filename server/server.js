@@ -7,7 +7,12 @@ const app = express();
 
 // ============ MIDDLEWARE ============
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://localhost:3000'],
+    origin: [
+        'http://localhost:5173',
+        'http://localhost:3000',
+        /\.vercel\.app$/,
+        /\.railway\.app$/
+    ],
     credentials: true
 }));
 
