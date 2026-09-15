@@ -18,7 +18,10 @@ const OrderManagement = () => {
 
             const token = localStorage.getItem('token');
 
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders/admin/all`, {
+            const API_URL = 'https://shoppluxe-production.up.railway.app';
+
+            // Phir:
+            const response = await fetch(`${API_URL}/api/orders/admin/all`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

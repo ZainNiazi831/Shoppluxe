@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = 'https://shoppluxe-production.up.railway.app';
 
 const Profile = () => {
     const { logout, user } = useAuth();

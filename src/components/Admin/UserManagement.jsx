@@ -18,7 +18,9 @@ const UserManagement = () => {
 
             const token = localStorage.getItem('token');
 
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/admin/users`, {
+            const API_URL = 'https://shoppluxe-production.up.railway.app';
+
+            const response = await fetch(`${API_URL}/api/users/admin/users`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

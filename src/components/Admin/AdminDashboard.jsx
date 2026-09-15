@@ -13,7 +13,7 @@ import OrderManagement from './OrderManagement';
 import UserManagement from './UserManagement';
 import ReviewManagement from './ReviewManagement';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = 'https://shoppluxe-production.up.railway.app';
 
 const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('dashboard');
