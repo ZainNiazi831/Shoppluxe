@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'import.meta.env.VITE_API_URL/api';
+// ✅ FIXED: Backticks use karein, single quotes nahi
+const API_URL = `${import.meta.env.VITE_API_URL}/api`;
 
 const api = axios.create({
     baseURL: API_URL,
@@ -112,7 +113,6 @@ export const UserService = {
 
     isAuthenticated: () => !!localStorage.getItem('token'),
 
-    // ✅ Forgot Password
     forgotPassword: async (email) => {
         try {
             const response = await api.post('/users/forgot-password', { email });
@@ -125,7 +125,6 @@ export const UserService = {
         }
     },
 
-    // ✅ Reset Password
     resetPassword: async (token, newPassword) => {
         try {
             const response = await api.post(`/users/reset-password/${token}`, { newPassword });
@@ -138,7 +137,6 @@ export const UserService = {
         }
     },
 
-    // ✅ Get Profile
     getProfile: async () => {
         try {
             const response = await api.get('/users/profile');
@@ -151,7 +149,6 @@ export const UserService = {
         }
     },
 
-    // ✅ Update Profile
     updateProfile: async (userData) => {
         try {
             const response = await api.put('/users/profile', userData);
@@ -171,7 +168,6 @@ export const UserService = {
         }
     },
 
-    // ✅ Change Password
     changePassword: async (currentPassword, newPassword) => {
         try {
             const response = await api.put('/users/change-password', {
@@ -187,7 +183,6 @@ export const UserService = {
         }
     },
 
-    // ✅ Get Addresses
     getAddresses: async () => {
         try {
             const response = await api.get('/users/addresses');
@@ -200,7 +195,6 @@ export const UserService = {
         }
     },
 
-    // ✅ Add Address
     addAddress: async (addressData) => {
         try {
             const response = await api.post('/users/addresses', addressData);
@@ -213,7 +207,6 @@ export const UserService = {
         }
     },
 
-    // ✅ Update Address
     updateAddress: async (addressId, addressData) => {
         try {
             const response = await api.put(`/users/addresses/${addressId}`, addressData);
@@ -226,7 +219,6 @@ export const UserService = {
         }
     },
 
-    // ✅ Delete Address
     deleteAddress: async (addressId) => {
         try {
             const response = await api.delete(`/users/addresses/${addressId}`);
@@ -239,7 +231,6 @@ export const UserService = {
         }
     },
 
-    // ✅ Set Default Address
     setDefaultAddress: async (addressId) => {
         try {
             const response = await api.put(`/users/addresses/${addressId}/default`);
@@ -277,12 +268,37 @@ export const OrderService = {
                 error: error.response?.data?.error || 'Failed to fetch orders'
             };
         }
+    },
+
+    // ✅ Admin: Get all orders
+    getAllOrders: async () => {
+        try {
+            const response = await api.get('/orders/admin/all');
+            return response.data;
+        } catch (error) {
+            return {
+                success: false,
+                error: error.response?.data?.error || 'Failed to fetch orders'
+            };
+        }
+    },
+
+    // ✅ Admin: Update order status
+    updateOrderStatus: async (orderId, orderStatus) => {
+        try {
+            const response = await api.put(`/orders/${orderId}/status`, { orderStatus });
+            return response.data;
+        } catch (error) {
+            return {
+                success: false,
+                error: error.response?.data?.error || 'Failed to update order status'
+            };
+        }
     }
 };
 
 // ============ REVIEW SERVICE ============
 export const ReviewService = {
-    // Get reviews for a product (public)
     getProductReviews: async (productId) => {
         try {
             const response = await api.get(`/reviews/product/${productId}`);
@@ -295,7 +311,6 @@ export const ReviewService = {
         }
     },
 
-    // Add review (customer)
     addReview: async (reviewData) => {
         try {
             const response = await api.post('/reviews', reviewData);
@@ -308,7 +323,6 @@ export const ReviewService = {
         }
     },
 
-    // Update own review
     updateReview: async (reviewId, reviewData) => {
         try {
             const response = await api.put(`/reviews/${reviewId}`, reviewData);
@@ -321,7 +335,6 @@ export const ReviewService = {
         }
     },
 
-    // Delete own review
     deleteReview: async (reviewId) => {
         try {
             const response = await api.delete(`/reviews/${reviewId}`);
@@ -334,7 +347,6 @@ export const ReviewService = {
         }
     },
 
-    // ✅ Admin: Get all reviews
     getAllReviews: async () => {
         try {
             const response = await api.get('/reviews/admin/all');
@@ -347,7 +359,6 @@ export const ReviewService = {
         }
     },
 
-    // ✅ Admin: Update review status
     updateReviewStatus: async (reviewId, status) => {
         try {
             const response = await api.put(`/reviews/admin/${reviewId}/status`, { status });
@@ -360,7 +371,6 @@ export const ReviewService = {
         }
     },
 
-    // ✅ Admin: Delete review
     deleteReviewAdmin: async (reviewId) => {
         try {
             const response = await api.delete(`/reviews/admin/${reviewId}`);

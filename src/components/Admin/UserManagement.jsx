@@ -18,7 +18,7 @@ const UserManagement = () => {
 
             const token = localStorage.getItem('token');
 
-            const response = await fetch('import.meta.env.VITE_API_URL/api/users/admin/users', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/admin/users`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
