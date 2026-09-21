@@ -5,7 +5,8 @@ import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import {
     ShoppingCart, Heart, CircleUser, Search, X,
-    LogOut, ChevronDown, Crown, LogIn, UserPlus, Menu
+    LogOut, ChevronDown, Crown, LogIn, UserPlus, Menu,
+    Home, ShoppingBag, User, Package
 } from 'lucide-react';
 import myLogo from '../assets/Logo.png';
 
@@ -40,7 +41,6 @@ const Navbar = () => {
         }
     };
 
-    // ✅ Close dropdown helper
     const closeProfileDropdown = () => {
         setIsProfileOpen(false);
     };
@@ -154,17 +154,18 @@ const Navbar = () => {
         .mobile-menu {
           display: none;
           flex-direction: column;
-          gap: 12px;
+          gap: 4px;
           padding: 16px 0;
           border-top: 1px solid #eee;
           margin-top: 10px;
         }
         .mobile-menu.open { display: flex; }
+
         .mobile-menu a, .mobile-menu button {
           display: flex;
           align-items: center;
-          gap: 10px;
-          padding: 12px 16px;
+          gap: 14px;
+          padding: 14px 16px;
           border-radius: 12px;
           text-decoration: none;
           color: var(--color-navy, #2F4156);
@@ -175,9 +176,14 @@ const Navbar = () => {
           width: 100%;
           text-align: left;
           font-size: 15px;
+          transition: background 0.2s ease;
         }
         .mobile-menu a:hover, .mobile-menu button:hover {
-          background: #f5f5f5;
+          background: #F5EFEB;
+        }
+        .mobile-menu a svg, .mobile-menu button svg {
+          flex-shrink: 0;
+          color: var(--color-teal, #567C8D);
         }
 
         /* ============ RESPONSIVE ============ */
@@ -248,42 +254,23 @@ const Navbar = () => {
                                             <p style={{ fontSize: '12px', color: 'gray', margin: 0 }}>{user?.email}</p>
                                         </div>
 
-                                        {/* ✅ My Profile - click pe close */}
-                                        <Link
-                                            to="/profile"
-                                            className="dropdown-item"
-                                            onClick={closeProfileDropdown}
-                                        >
+                                        <Link to="/profile" className="dropdown-item" onClick={closeProfileDropdown}>
                                             <CircleUser size={18} /> My Profile
                                         </Link>
 
-                                        {/* ✅ My Orders - click pe close */}
-                                        <Link
-                                            to="/orders"
-                                            className="dropdown-item"
-                                            onClick={closeProfileDropdown}
-                                        >
-                                            <ShoppingCart size={18} /> My Orders
+                                        <Link to="/orders" className="dropdown-item" onClick={closeProfileDropdown}>
+                                            <Package size={18} /> My Orders
                                         </Link>
 
-                                        {/* ✅ Admin Dashboard - click pe close */}
                                         {user?.role === 'admin' && (
-                                            <Link
-                                                to="/admin"
-                                                className="dropdown-item"
-                                                onClick={closeProfileDropdown}
-                                            >
+                                            <Link to="/admin" className="dropdown-item" onClick={closeProfileDropdown}>
                                                 <Crown size={18} color="#F5A623" /> Admin Dashboard
                                             </Link>
                                         )}
 
-                                        {/* ✅ Logout - click pe close + logout */}
                                         <div
                                             className="dropdown-item"
-                                            onClick={() => {
-                                                closeProfileDropdown();
-                                                logout();
-                                            }}
+                                            onClick={() => { closeProfileDropdown(); logout(); }}
                                             style={{ color: 'red' }}
                                         >
                                             <LogOut size={18} /> Logout
@@ -321,7 +308,7 @@ const Navbar = () => {
                     <form onSubmit={handleSearch} style={{
                         display: 'flex', alignItems: 'center',
                         background: 'var(--color-sky-blue)', borderRadius: '50px',
-                        padding: '10px 20px', gap: '10px'
+                        padding: '10px 20px', gap: '10px', marginBottom: '8px'
                     }}>
                         <Search size={18} color="var(--color-teal)" />
                         <input
@@ -333,30 +320,44 @@ const Navbar = () => {
                         />
                     </form>
 
-                    <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>🏠 Home</Link>
-                    <Link to="/products" onClick={() => setIsMobileMenuOpen(false)}>🛍️ Products</Link>
+                    <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Home size={20} /> Home
+                    </Link>
+                    <Link to="/products" onClick={() => setIsMobileMenuOpen(false)}>
+                        <ShoppingBag size={20} /> Products
+                    </Link>
                     <Link to="/wishlist" onClick={() => setIsMobileMenuOpen(false)}>
-                        ❤️ Wishlist ({getWishlistCount()})
+                        <Heart size={20} /> Wishlist ({getWishlistCount()})
                     </Link>
                     <Link to="/cart" onClick={() => setIsMobileMenuOpen(false)}>
-                        🛒 Cart ({getItemCount()})
+                        <ShoppingCart size={20} /> Cart ({getItemCount()})
                     </Link>
 
                     {isAuthenticated ? (
                         <>
-                            <Link to="/profile" onClick={() => setIsMobileMenuOpen(false)}>👤 My Profile</Link>
-                            <Link to="/orders" onClick={() => setIsMobileMenuOpen(false)}>📦 My Orders</Link>
+                            <Link to="/profile" onClick={() => setIsMobileMenuOpen(false)}>
+                                <User size={20} /> My Profile
+                            </Link>
+                            <Link to="/orders" onClick={() => setIsMobileMenuOpen(false)}>
+                                <Package size={20} /> My Orders
+                            </Link>
                             {user?.role === 'admin' && (
-                                <Link to="/admin" onClick={() => setIsMobileMenuOpen(false)}>👑 Admin Dashboard</Link>
+                                <Link to="/admin" onClick={() => setIsMobileMenuOpen(false)}>
+                                    <Crown size={20} /> Admin Dashboard
+                                </Link>
                             )}
-                            <button onClick={() => { logout(); setIsMobileMenuOpen(false); }} style={{ color: 'red' }}>
-                                🚪 Logout
+                            <button onClick={() => { logout(); setIsMobileMenuOpen(false); }} style={{ color: '#DC2626' }}>
+                                <LogOut size={20} color="#DC2626" /> Logout
                             </button>
                         </>
                     ) : (
                         <>
-                            <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>🔐 Login</Link>
-                            <Link to="/register" onClick={() => setIsMobileMenuOpen(false)}>✨ Register</Link>
+                            <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                                <LogIn size={20} /> Login
+                            </Link>
+                            <Link to="/register" onClick={() => setIsMobileMenuOpen(false)}>
+                                <UserPlus size={20} /> Register
+                            </Link>
                         </>
                     )}
                 </div>
