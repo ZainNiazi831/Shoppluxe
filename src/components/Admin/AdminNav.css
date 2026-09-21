@@ -83,7 +83,7 @@
     }
 }
 
-/* ============ MOBILE: 2-COLUMN GRID (EQUAL) ============ */
+/* ============ MOBILE: 2-COLUMN GRID (FIXED ALIGNMENT) ============ */
 @media (max-width: 480px) {
     .admin-nav-wrapper {
         padding: 12px;
@@ -95,6 +95,8 @@
         gap: 10px;
         overflow-x: visible;
         width: 100%;
+        justify-items: stretch;
+        align-items: center;
     }
 
     .admin-nav-item {
@@ -107,6 +109,8 @@
         min-width: 0;
         gap: 6px;
         text-align: center;
+        justify-self: stretch;
+        align-self: stretch;
     }
 
     .admin-nav-item span {
