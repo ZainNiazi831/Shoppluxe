@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Shield, User } from 'lucide-react';
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const UserManagement = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -17,8 +19,6 @@ const UserManagement = () => {
             setError('');
 
             const token = localStorage.getItem('token');
-
-            const API_URL = 'https://shoppluxe-production.up.railway.app';
 
             const response = await fetch(`${API_URL}/api/users/admin/users`, {
                 headers: {
@@ -99,28 +99,69 @@ const UserManagement = () => {
                 <div style={{ background: 'white', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 2px 12px rgba(47, 65, 86, 0.05)' }}>
                     {filtered.map((u, i) => (
                         <div key={u._id || i} style={{
-                            display: 'flex', alignItems: 'center', gap: '16px',
-                            padding: '16px 20px',
+                            display: 'flex', alignItems: 'center', gap: '14px',
+                            padding: '14px 18px',
                             borderBottom: i < filtered.length - 1 ? '1px solid #F0EDE7' : 'none'
                         }}>
+                            {/* Avatar */}
                             <div style={{
-                                width: '45px', height: '45px', borderRadius: '50%',
-                                background: '#567C8D', color: 'white',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                fontWeight: 'bold', fontSize: '16px'
+                                width: '44px',
+                                height: '44px',
+                                minWidth: '44px',
+                                borderRadius: '50%',
+                                background: '#567C8D',
+                                color: 'white',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontWeight: 'bold',
+                                fontSize: '16px',
+                                flexShrink: 0
                             }}>
                                 {u.name?.charAt(0).toUpperCase() || '?'}
                             </div>
-                            <div style={{ flex: 1 }}>
-                                <p style={{ fontWeight: 600, color: '#2F4156', margin: 0 }}>{u.name}</p>
-                                <p style={{ fontSize: '13px', color: '#8A9BAB', margin: 0 }}>{u.email}</p>
+
+                            {/* Info */}
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                                <p style={{
+                                    fontWeight: 600,
+                                    color: '#2F4156',
+                                    margin: 0,
+                                    fontSize: '14px',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap'
+                                }}>
+                                    {u.name}
+                                </p>
+                                <p style={{
+                                    fontSize: '12px',
+                                    color: '#8A9BAB',
+                                    margin: '2px 0 0 0',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap'
+                                }}>
+                                    {u.email}
+                                </p>
                             </div>
+
+                            {/* Role Badge */}
                             <span style={{
-                                display: 'flex', alignItems: 'center', gap: '4px',
-                                padding: '4px 12px', borderRadius: '50px',
-                                fontSize: '12px', fontWeight: 600,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '4px',
+                                padding: '6px 12px',
+                                borderRadius: '50px',
+                                fontSize: '11px',
+                                fontWeight: 600,
                                 background: u.role === 'admin' ? '#FEF3C7' : '#E0E7FF',
-                                color: u.role === 'admin' ? '#F59E0B' : '#6366F1'
+                                color: u.role === 'admin' ? '#F59E0B' : '#6366F1',
+                                minWidth: '80px',
+                                height: '26px',
+                                flexShrink: 0,
+                                textTransform: 'capitalize'
                             }}>
                                 {u.role === 'admin' ? <Shield size={12} /> : <User size={12} />}
                                 {u.role}
