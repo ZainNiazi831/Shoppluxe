@@ -48,7 +48,6 @@ const Navbar = () => {
     return (
         <>
             <style>{`
-        /* ============ NAVBAR BASE ============ */
         .navbar {
           position: sticky;
           top: 0;
@@ -66,8 +65,6 @@ const Navbar = () => {
           gap: 20px;
         }
         .navbar-logo img { height: 60px; }
-
-        /* ============ SEARCH (desktop) ============ */
         .navbar-search {
           flex: 1;
           max-width: 450px;
@@ -85,8 +82,6 @@ const Navbar = () => {
           width: 100%;
           font-size: 14px;
         }
-
-        /* ============ ICONS (desktop) ============ */
         .navbar-icons {
           display: flex;
           align-items: center;
@@ -110,8 +105,6 @@ const Navbar = () => {
           font-size: 10px;
           font-weight: 600;
         }
-
-        /* ============ PROFILE AVATAR ============ */
         .nav-avatar {
           width: 40px;
           height: 40px;
@@ -123,8 +116,6 @@ const Navbar = () => {
           justify-content: center;
           font-weight: bold;
         }
-
-        /* ============ DROPDOWN ITEM ============ */
         .dropdown-item {
           padding: 10px 16px;
           display: flex;
@@ -140,8 +131,6 @@ const Navbar = () => {
         .dropdown-item:hover {
           background: #f5f5f5;
         }
-
-        /* ============ MOBILE MENU BUTTON ============ */
         .mobile-menu-btn {
           display: none;
           background: transparent;
@@ -149,8 +138,6 @@ const Navbar = () => {
           cursor: pointer;
           padding: 8px;
         }
-
-        /* ============ MOBILE MENU PANEL ============ */
         .mobile-menu {
           display: none;
           flex-direction: column;
@@ -160,7 +147,6 @@ const Navbar = () => {
           margin-top: 10px;
         }
         .mobile-menu.open { display: flex; }
-
         .mobile-menu a, .mobile-menu button {
           display: flex;
           align-items: center;
@@ -185,8 +171,6 @@ const Navbar = () => {
           flex-shrink: 0;
           color: var(--color-teal, #567C8D);
         }
-
-        /* ============ RESPONSIVE ============ */
         @media (max-width: 768px) {
           .navbar { padding: 10px 16px; }
           .navbar-logo img { height: 45px; }
@@ -217,6 +201,28 @@ const Navbar = () => {
 
                     {/* DESKTOP ICONS */}
                     <div className="navbar-icons">
+                        {/* ✅ Products Link */}
+                        <Link
+                            to="/products"
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                padding: '8px 16px',
+                                borderRadius: '50px',
+                                textDecoration: 'none',
+                                color: 'var(--color-navy)',
+                                fontWeight: 600,
+                                fontSize: '14px',
+                                transition: 'all 0.2s ease',
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-sky-blue)'}
+                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                        >
+                            <ShoppingBag size={18} />
+                            Products
+                        </Link>
+
                         <Link to="/wishlist" className="nav-icon-btn">
                             <Heart size={24} color="var(--color-teal)" />
                             {getWishlistCount() > 0 && (

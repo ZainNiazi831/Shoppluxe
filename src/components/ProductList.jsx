@@ -16,6 +16,7 @@ import {
     Checkbox,
     Rating,
     Divider,
+    Chip,
 } from '@mui/material';
 import { FilterList, Close } from '@mui/icons-material';
 import ProductCard from './ProductCard';
@@ -42,18 +43,24 @@ const ProductList = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    // ✅ Get search query from URL
+    // ✅ URL se filters read karo (page load pe)
     useEffect(() => {
         const params = new URLSearchParams(location.search);
-        const searchQuery = params.get('search');
-        console.log('🔍 URL Search Query:', searchQuery);
+        const urlFilters = {};
 
-        if (searchQuery) {
-            setFilters(prev => ({ ...prev, search: searchQuery }));
-        } else {
-            setFilters(prev => ({ ...prev, search: '' }));
+        if (params.get('search')) urlFilters.search = params.get('search');
+        if (params.get('category')) urlFilters.category = params.get('category');
+        if (params.get('sortBy')) urlFilters.sortBy = params.get('sortBy');
+        if (params.get('minPrice')) urlFilters.minPrice = params.get('minPrice');
+        if (params.get('maxPrice')) urlFilters.maxPrice = params.get('maxPrice');
+        if (params.get('minRating')) urlFilters.minRating = params.get('minRating');
+        if (params.get('inStock')) urlFilters.inStock = params.get('inStock') === 'true';
+        if (params.get('onSale')) urlFilters.onSale = params.get('onSale') === 'true';
+
+        if (Object.keys(urlFilters).length > 0) {
+            setFilters(prev => ({ ...prev, ...urlFilters }));
         }
-    }, [location]);
+    }, [location.search]);
 
     // ✅ Load categories
     useEffect(() => {
@@ -94,12 +101,7 @@ const ProductList = () => {
             if (filters.onSale) apiFilters.onSale = 'true';
             if (filters.sortBy) apiFilters.sortBy = filters.sortBy;
 
-            console.log('🔍 Sending API Filters:', apiFilters);
-
             const result = await ProductService.getAll(apiFilters);
-
-            console.log('📦 Received Products:', result.products?.length);
-            console.log('📦 Products:', result.products);
 
             if (result.success) {
                 setProducts(result.products || []);
@@ -113,12 +115,31 @@ const ProductList = () => {
         setLoading(false);
     };
 
+    // ✅ Filters change hone pe URL update karo
+    const updateURL = (newFilters) => {
+        const params = new URLSearchParams();
+
+        if (newFilters.search) params.set('search', newFilters.search);
+        if (newFilters.category) params.set('category', newFilters.category);
+        if (newFilters.sortBy && newFilters.sortBy !== 'newest') params.set('sortBy', newFilters.sortBy);
+        if (newFilters.minPrice) params.set('minPrice', newFilters.minPrice);
+        if (newFilters.maxPrice) params.set('maxPrice', newFilters.maxPrice);
+        if (newFilters.minRating) params.set('minRating', newFilters.minRating);
+        if (newFilters.inStock) params.set('inStock', 'true');
+        if (newFilters.onSale) params.set('onSale', 'true');
+
+        const queryString = params.toString();
+        navigate(`/products${queryString ? `?${queryString}` : ''}`, { replace: true });
+    };
+
     const handleFilterChange = (key, value) => {
-        setFilters(prev => ({ ...prev, [key]: value }));
+        const newFilters = { ...filters, [key]: value };
+        setFilters(newFilters);
+        updateURL(newFilters);
     };
 
     const clearAllFilters = () => {
-        setFilters({
+        const emptyFilters = {
             search: '',
             category: '',
             sortBy: 'newest',
@@ -127,8 +148,13 @@ const ProductList = () => {
             minRating: '',
             inStock: false,
             onSale: false,
-        });
+        };
+        setFilters(emptyFilters);
         navigate('/products');
+    };
+
+    const removeFilter = (key) => {
+        handleFilterChange(key, key === 'inStock' || key === 'onSale' ? false : '');
     };
 
     const activeFilterCount = () => {
@@ -170,6 +196,50 @@ const ProductList = () => {
                     )}
                 </Box>
             </Box>
+
+            {/* ✅ Active Filters Chips */}
+            {activeFilterCount() > 0 && (
+                <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 3 }}>
+                    {filters.category && (
+                        <Chip
+                            label={`Category: ${filters.category}`}
+                            onDelete={() => removeFilter('category')}
+                            sx={{ backgroundColor: '#C8D9E6' }}
+                        />
+                    )}
+                    {(filters.minPrice || filters.maxPrice) && (
+                        <Chip
+                            label={`Price: $${filters.minPrice || 0} - $${filters.maxPrice || '∞'}`}
+                            onDelete={() => {
+                                handleFilterChange('minPrice', '');
+                                handleFilterChange('maxPrice', '');
+                            }}
+                            sx={{ backgroundColor: '#C8D9E6' }}
+                        />
+                    )}
+                    {filters.minRating && (
+                        <Chip
+                            label={`${filters.minRating}★ & up`}
+                            onDelete={() => removeFilter('minRating')}
+                            sx={{ backgroundColor: '#C8D9E6' }}
+                        />
+                    )}
+                    {filters.inStock && (
+                        <Chip
+                            label="In Stock"
+                            onDelete={() => removeFilter('inStock')}
+                            sx={{ backgroundColor: '#C8D9E6' }}
+                        />
+                    )}
+                    {filters.onSale && (
+                        <Chip
+                            label="On Sale"
+                            onDelete={() => removeFilter('onSale')}
+                            sx={{ backgroundColor: '#C8D9E6' }}
+                        />
+                    )}
+                </Box>
+            )}
 
             <Grid container spacing={3}>
                 {showFilters && (
