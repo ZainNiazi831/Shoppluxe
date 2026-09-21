@@ -83,7 +83,7 @@
     }
 }
 
-/* ============ MOBILE: 2-COLUMN GRID (FIXED ALIGNMENT) ============ */
+/* ============ MOBILE: 2-COLUMN GRID (FIXED) ============ */
 @media (max-width: 480px) {
     .admin-nav-wrapper {
         padding: 12px;
@@ -95,22 +95,18 @@
         gap: 10px;
         overflow-x: visible;
         width: 100%;
-        justify-items: stretch;
-        align-items: center;
     }
 
     .admin-nav-item {
         display: flex;
         align-items: center;
-        justify-content: center;
-        padding: 12px 8px;
+        justify-content: flex-start;
+        padding: 12px 12px;
         font-size: 12px;
         width: 100%;
         min-width: 0;
-        gap: 6px;
-        text-align: center;
-        justify-self: stretch;
-        align-self: stretch;
+        gap: 8px;
+        text-align: left;
     }
 
     .admin-nav-item span {
