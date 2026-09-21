@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
     LayoutDashboard, Package, FolderTree,
-    Boxes, ShoppingCart, Users, Star, Settings
+    Boxes, ShoppingCart, Users, Star
 } from 'lucide-react';
 import './AdminNav.css';
 
@@ -26,7 +26,6 @@ const AdminDashboard = () => {
         { id: 'orders', label: 'Orders', icon: <ShoppingCart size={18} /> },
         { id: 'users', label: 'Users', icon: <Users size={18} /> },
         { id: 'reviews', label: 'Reviews', icon: <Star size={18} /> },
-        { id: 'settings', label: 'Settings', icon: <Settings size={18} /> },
     ];
 
     const renderContent = () => {
@@ -38,7 +37,6 @@ const AdminDashboard = () => {
             case 'orders': return <OrderManagement />;
             case 'users': return <UserManagement />;
             case 'reviews': return <ReviewManagement />;
-            case 'settings': return <SettingsPlaceholder />;
             default: return <DashboardHome />;
         }
     };
@@ -223,17 +221,5 @@ const DashboardHome = () => {
         </>
     );
 };
-
-// ============ SETTINGS PLACEHOLDER ============
-const SettingsPlaceholder = () => (
-    <div style={{
-        background: 'white', borderRadius: '16px', padding: '60px',
-        textAlign: 'center', color: '#8A9BAB',
-        boxShadow: '0 2px 12px rgba(47, 65, 86, 0.05)'
-    }}>
-        <h2 style={{ color: '#2F4156', marginBottom: '8px' }}>⚙️ Settings</h2>
-        <p>Ye section abhi development mein hai</p>
-    </div>
-);
 
 export default AdminDashboard;
