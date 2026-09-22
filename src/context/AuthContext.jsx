@@ -45,6 +45,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const value = {
+        // ✅ Original
         user,
         loading,
         error,
@@ -52,7 +53,11 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         isAuthenticated: !!user,
-        isAdmin: user?.role === 'admin'
+        isAdmin: user?.role === 'admin',
+
+        // ✅ Aliases (Login.jsx/Register.jsx ke liye)
+        currentUser: user,
+        userData: user,
     };
 
     return (

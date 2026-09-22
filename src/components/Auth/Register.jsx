@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, Navigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 const Register = () => {
@@ -13,8 +13,33 @@ const Register = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
-    const { register } = useAuth();
+    const { register, currentUser, userData, loading: authLoading } = useAuth();
     const navigate = useNavigate();
+
+    // ✅ Agar auth check ho raha hai, to loading dikhao
+    if (authLoading) {
+        return (
+            <div style={{
+                minHeight: '100vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#f5f7fb',
+            }}>
+                <p>Loading...</p>
+            </div>
+        );
+    }
+
+    // ✅ Agar already logged in hai, to redirect karo
+    if (currentUser) {
+        // Admin hai → Admin Dashboard
+        if (userData?.role === 'admin') {
+            return <Navigate to="/admin" replace />;
+        }
+        // Customer hai → Home
+        return <Navigate to="/" replace />;
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -47,7 +72,6 @@ const Register = () => {
                 confirmPassword: '',
                 phone: ''
             });
-            // ✅ FIX: Go to login page after successful registration
             setTimeout(() => {
                 navigate('/login');
             }, 2000);
@@ -84,7 +108,6 @@ const Register = () => {
                 </h2>
                 <p style={{ color: '#666', marginBottom: '24px' }}>Join us and start shopping!</p>
 
-                {/* ✅ Success Message */}
                 {success && (
                     <div style={{
                         backgroundColor: '#d1fae5',
@@ -99,7 +122,6 @@ const Register = () => {
                     </div>
                 )}
 
-                {/* Error message */}
                 {error && (
                     <div style={{
                         backgroundColor: '#fee2e2',

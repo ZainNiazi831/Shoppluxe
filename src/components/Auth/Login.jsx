@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, Navigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 const Login = () => {
@@ -7,8 +7,33 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const { login } = useAuth();
+    const { login, currentUser, userData, loading: authLoading } = useAuth();
     const navigate = useNavigate();
+
+    // ✅ Agar auth check ho raha hai, to loading dikhao
+    if (authLoading) {
+        return (
+            <div style={{
+                minHeight: '100vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: 'var(--color-bg-primary)',
+            }}>
+                <p>Loading...</p>
+            </div>
+        );
+    }
+
+    // ✅ Agar already logged in hai, to redirect karo
+    if (currentUser) {
+        // Admin hai → Admin Dashboard
+        if (userData?.role === 'admin') {
+            return <Navigate to="/admin" replace />;
+        }
+        // Customer hai → Home
+        return <Navigate to="/" replace />;
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -16,7 +41,12 @@ const Login = () => {
         setLoading(true);
         const result = await login(email, password);
         if (result.success) {
-            navigate('/');
+            // ✅ Login successful — role ke hisaab se redirect
+            if (result.user?.role === 'admin') {
+                navigate('/admin');
+            } else {
+                navigate('/');
+            }
         } else {
             setError(result.error);
         }
@@ -107,7 +137,7 @@ const Login = () => {
                         />
                     </div>
 
-                    {/* ✅ FORGOT PASSWORD LINK */}
+                    {/* FORGOT PASSWORD LINK */}
                     <div style={{ textAlign: 'right', marginBottom: '24px' }}>
                         <Link
                             to="/forgot-password"
